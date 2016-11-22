@@ -1,0 +1,21 @@
+{
+  "name": "koajs",
+  "version": "1.0.0",
+  "description": "A place where is writing some interests",
+  "main": "index.js",
+  "scripts": {
+    "fulltest": "mocha --recursive",
+    "test": "mocha"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^3.1.2",
+    "supertest": "^2.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jadeydi/koajs.git"
+  }
+}
