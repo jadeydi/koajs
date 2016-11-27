@@ -1,7 +1,7 @@
 var json = require('koa-json');
 var route = require('koa-route');
-var koa = require('koa');
-var app = module.exports = koa();
+var Koa = require('koa');
+var app = module.exports = new Koa();
 app.name = "SurprisesOfLife";
 app.use(json());
 

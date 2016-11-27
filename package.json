@@ -11,6 +11,7 @@
   "author": "jadeydi",
   "license": "ISC",
   "devDependencies": {
+    "koa": "^2.0.0",
     "mocha": "^3.1.2",
     "supertest": "^2.0.1"
   },
