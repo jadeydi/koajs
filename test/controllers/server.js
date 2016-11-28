@@ -8,4 +8,11 @@ describe('Server', function() {
     .expect(200)
     .expect('{\n  "page": "index"\n}', done);
   });
+
+  it('should got 200 and {"page": "users"}', function(done) {
+    request
+    .get('/users')
+    .expect(200)
+    .expect('{\n  "page": "users"\n}', done);
+  });
 });
