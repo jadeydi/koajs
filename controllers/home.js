@@ -1,7 +1,7 @@
-var home = {
-  index: function *(){
-    this.body = { page: 'index' };
-  }
-};
+var router = require('koa-router')();
 
-module.exports = home;
+router.get('/', function(ctx) {
+  ctx.body = {page: 'index'};
+})
+
+module.exports = router;
