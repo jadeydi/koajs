@@ -20,7 +20,7 @@
     "url": "git://github.com/jadeydi/koajs.git"
   },
   "dependencies": {
-    "koa-json": "^1.1.3",
+    "koa-json": "^2.0.2",
     "koa-router": "^7.0.1"
   }
 }
