@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "fulltest": "mocha --recursive",
-    "test": "mocha"
+    "test": "mocha",
+    "sequelize": "sequelize"
   },
   "keywords": [],
   "author": "jadeydi",
   "license": "ISC",
   "devDependencies": {
-    "koa": "^2.0.0",
     "mocha": "^3.1.2",
     "supertest": "^2.0.1"
   },
@@ -20,7 +20,12 @@
     "url": "git://github.com/jadeydi/koajs.git"
   },
   "dependencies": {
+    "koa": "^2.0.0",
     "koa-json": "^2.0.2",
-    "koa-router": "^7.0.1"
+    "koa-router": "^7.0.1",
+    "pg": "^6.1.0",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.27.0",
+    "sequelize-cli": "^2.4.0"
   }
 }
