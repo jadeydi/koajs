@@ -32,7 +32,8 @@ module.exports = {
         defaultValue: ''
       },
       bio: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
+        defaultValue: ''
       },
       authentication_token: {
         allowNull: false,
@@ -48,11 +49,13 @@ module.exports = {
       },
       created_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('NOW()')
       },
       updated_at: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('NOW()')
       }
     });
   },
