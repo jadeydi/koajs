@@ -4,10 +4,9 @@ var app = module.exports = new Koa();
 app.name = "SurprisesOfLife";
 app.use(json());
 
+//routers
 var home = require('./controllers/home');
 var users = require('./controllers/users');
-
-//routers
 app.use(home.routes());
 app.use(users.routes());
 
