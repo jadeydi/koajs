@@ -3,7 +3,7 @@ const randomstring = require("randomstring");
 const passwordHash = require('password-hash');
 
 module.exports = function(sequelize, DataTypes) {
-  const User = sequelize.define('User', {
+  const User = sequelize.define('user', {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
