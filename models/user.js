@@ -11,7 +11,8 @@ module.exports = function(sequelize, DataTypes) {
         is: /^[a-z0-9][a-z0-9_]+$/i,
         min: 3,
         max: 32
-      }
+      },
+      unique: true
     },
     nickname: {
       type: DataTypes.STRING,
@@ -25,7 +26,8 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       validate: {
         isEmail: true
-      }
+      },
+      unique: true
     },
     avatarUrl: {
       type: DataTypes.STRING,
@@ -33,12 +35,27 @@ module.exports = function(sequelize, DataTypes) {
     },
     authenticationToken: {
       type: DataTypes.STRING,
-      field: 'authentication_token'
+      field: 'authentication_token',
+      unique: true
     },
     bio: DataTypes.TEXT,
     encryptedPassword: {
       type: DataTypes.STRING,
       field: 'encrypted_password'
+    },
+    password: {
+      type: DataTypes.VIRTUAL,
+      set: function (val) {
+        // Remember to set the data value, otherwise it won't be validated
+        this.setDataValue('password', val);
+      },
+      validate: {
+        isLongEnough: function (val) {
+          if (val.length < 6) {
+            throw new Error("Please choose a longer password")
+          }
+        }
+      }
     },
     salt: {
       type: DataTypes.STRING,
@@ -64,6 +81,7 @@ module.exports = function(sequelize, DataTypes) {
       beforeCreate: function(user, options) {
         user.salt = randomstring.generate(16);
         user.authenticationToken = randomstring.generate({ charset: 'hex' });
+        user.encryptedPassword = passwordHash.generate(user.password + user.salt)
       }
     }
   },

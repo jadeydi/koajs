@@ -4,8 +4,8 @@
   "description": "A place where is writing some interests",
   "main": "index.js",
   "scripts": {
-    "fulltest": "mocha --recursive",
-    "test": "mocha",
+    "fulltest": "NODE_ENV=test mocha --recursive",
+    "test": "NODE_ENV=test mocha",
     "sequelize": "sequelize"
   },
   "keywords": [],
