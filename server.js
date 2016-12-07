@@ -1,12 +1,17 @@
-var json = require('koa-json');
-var Koa = require('koa');
-var app = module.exports = new Koa();
+const bodyParser = require('koa-bodyparser');
+const json = require('koa-json');
+const logger = require('koa-logger')
+const Koa = require('koa');
+const app = module.exports = new Koa();
+
 app.name = "SurprisesOfLife";
+app.use(bodyParser());
+app.use(logger());
 app.use(json());
 
 //routers
-var home = require('./controllers/home');
-var users = require('./controllers/users');
+const home = require('./controllers/home');
+const users = require('./controllers/users');
 app.use(home.routes());
 app.use(users.routes());
 

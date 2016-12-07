@@ -7,26 +7,18 @@ module.exports = function(sequelize, DataTypes) {
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        is: /^[a-z0-9][a-z0-9_]+$/i,
-        min: 3,
-        max: 32
-      },
+      validate: { is: /^[a-z0-9][a-z0-9_]+$/i, min: 3, max: 32 },
       unique: true
     },
     nickname: {
       type: DataTypes.STRING,
       allowNull: true,
-      validate: {
-        max: 108,
-      }
+      validate: { max: 108 }
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        isEmail: true
-      },
+      validate: { isEmail: true },
       unique: true
     },
     avatarUrl: {
@@ -90,6 +82,9 @@ module.exports = function(sequelize, DataTypes) {
     instanceMethods: {
       name: function() {
         return this.nickname || this.username
+      },
+      validPassword: function() {
+        return passwordHash.verify(this.password + this.salt, this.encryptedPassword)
       }
     }
   });
