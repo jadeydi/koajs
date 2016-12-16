@@ -28,18 +28,17 @@ app.use(function () {
             return next();
 
           case 3:
-            _context.next = 10;
+            _context.next = 9;
             break;
 
           case 5:
             _context.prev = 5;
             _context.t0 = _context['catch'](0);
 
-            console.info(_context.t0);
             ctx.status = 403;
             ctx.body = { hello: "world" };
 
-          case 10:
+          case 9:
           case 'end':
             return _context.stop();
         }

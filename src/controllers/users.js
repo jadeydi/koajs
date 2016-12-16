@@ -3,10 +3,10 @@ const User = require('../../models').user;
 const errHandler = require('../../utils/error');
 
 router.get('/users', async (ctx) => {
-  const body = {page: 'users'};
+  let body = {page: 'users'};
   ctx.body = body;
 }).post('/users', async (ctx) => {
-  const user = await User.create(ctx.request.body).then(function(user) {
+  let user = await User.create(ctx.request.body).then(function(user) {
     return user
   }).catch(function(err) {
     throw err;

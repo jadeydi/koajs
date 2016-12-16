@@ -1,7 +1,7 @@
 const router = require('koa-router')();
 
 router.get('/', async (ctx) => {
-  const body = {page: 'index'};
+  let body = {page: 'index'};
   ctx.body = body;
 });
 
