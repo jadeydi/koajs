@@ -1,4 +1,5 @@
-const router = require('koa-router')();
+import routers from 'koa-router';
+const router = routers();
 
 router.get('/', async (ctx) => {
   let body = {page: 'index'};

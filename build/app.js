@@ -4,52 +4,43 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+var _koaBodyparser = require('koa-bodyparser');
 
-var bodyParser = require('koa-bodyparser');
-var json = require('koa-json');
-var logger = require('koa-logger');
-var koa = require('koa');
-var app = new koa();
+var _koaBodyparser2 = _interopRequireDefault(_koaBodyparser);
+
+var _koaJson = require('koa-json');
+
+var _koaJson2 = _interopRequireDefault(_koaJson);
+
+var _koaLogger = require('koa-logger');
+
+var _koaLogger2 = _interopRequireDefault(_koaLogger);
+
+var _koa = require('koa');
+
+var _koa2 = _interopRequireDefault(_koa);
+
+var _exceptions = require('./middleware/exceptions');
+
+var exc = _interopRequireWildcard(_exceptions);
+
+var _constraints = require('./middleware/constraints');
+
+var con = _interopRequireWildcard(_constraints);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var app = new _koa2.default();
 
 app.name = "SurprisesOfLife";
-app.use(bodyParser());
-app.use(logger());
-app.use(json());
+app.use((0, _koaBodyparser2.default)());
+app.use((0, _koaLogger2.default)());
+app.use((0, _koaJson2.default)());
 
-app.use(function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee(ctx, next) {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.prev = 0;
-            _context.next = 3;
-            return next();
-
-          case 3:
-            _context.next = 9;
-            break;
-
-          case 5:
-            _context.prev = 5;
-            _context.t0 = _context['catch'](0);
-
-            ctx.status = 403;
-            ctx.body = { hello: "world" };
-
-          case 9:
-          case 'end':
-            return _context.stop();
-        }
-      }
-    }, _callee, undefined, [[0, 5]]);
-  }));
-
-  return function (_x, _x2) {
-    return _ref.apply(this, arguments);
-  };
-}());
+app.use(con.constraint());
+app.use(exc.forbidden());
 
 //routers
 var home = require('./controllers/home');

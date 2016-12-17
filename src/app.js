@@ -1,7 +1,7 @@
-const bodyParser = require('koa-bodyparser');
-const json = require('koa-json');
-const logger = require('koa-logger');
-const koa = require('koa');
+import bodyParser from 'koa-bodyparser';
+import json from 'koa-json';
+import logger from 'koa-logger';
+import koa from 'koa';
 const app  = new koa();
 
 app.name = "SurprisesOfLife";
@@ -9,14 +9,10 @@ app.use(bodyParser());
 app.use(logger());
 app.use(json());
 
-app.use(async (ctx, next) => {
-  try {
-    await next();
-  } catch(err) {
-    ctx.status = 403;
-    ctx.body = {hello: "world"};
-  }
-});
+import * as exc from './middleware/exceptions';
+import * as con from './middleware/constraints';
+app.use(con.constraint());
+app.use(exc.forbidden());
 
 //routers
 const home = require('./controllers/home');

@@ -1,6 +1,7 @@
-const router = require('koa-router')();
-const User = require('../../models').user;
-const errHandler = require('../../utils/error');
+import routers from 'koa-router';
+import models from '../../models';
+const router = routers();
+const User = models.user;
 
 router.get('/users', async (ctx) => {
   let body = {page: 'users'};
