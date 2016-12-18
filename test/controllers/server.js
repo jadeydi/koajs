@@ -1,7 +1,7 @@
 import app from '../../build/app';
 import req from 'supertest';
 const request = req.agent(app.listen());
-import {token} from '../config'
+import {token} from '../config';
 
 describe('Server', function() {
   describe('GET /', function() {

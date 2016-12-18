@@ -1,7 +1,7 @@
-const assert = require('assert');
-const errHandler = require('../../utils/error');
+import assert from 'assert';
+const extractor = require('../../utils/error');
 
-describe("User", function() {
+describe("models/user", function() {
   before(function () {
     return require('../../models').sequelize.sync({force: true});
   });
@@ -10,21 +10,21 @@ describe("User", function() {
     this.user = require('../../models').user;
   });
 
-  describe("#create without infomation", function() {
+  describe("#create null attributes", function() {
     it('should not create user', function() {
       this.user.create({}).then(function(user) {
       }).catch(function(err) {
-        assert.deepEqual(['password'], errHandler.paths(err));
+        assert.deepEqual(['password'], extractor.paths(err));
       });
     });
   });
 
-  describe("#create with invalid infomation", function() {
+  describe("#create with invalid attributes", function() {
     it('should not create user', function() {
       it('should create valid user', function() {
         this.user.create({password: "abc"}).then(function(user) {
         }).catch(function(err) {
-          assert.deepEqual(['username', 'email', 'password'], errHandler.paths(err));
+          assert.deepEqual(['username', 'email', 'password'], extractor.paths(err));
         });
       });
     });
