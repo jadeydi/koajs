@@ -3,10 +3,7 @@ const extractor = require('../../utils/error');
 
 describe("models/user", function() {
   before(function () {
-    return require('../../models').sequelize.sync({force: true});
-  });
-
-  beforeEach(function () {
+    require('../../models').sequelize.sync({force: true});
     this.user = require('../../models').user;
   });
 
@@ -21,11 +18,9 @@ describe("models/user", function() {
 
   describe("#create with invalid attributes", function() {
     it('should not create user', function() {
-      it('should create valid user', function() {
-        this.user.create({password: "abc"}).then(function(user) {
-        }).catch(function(err) {
-          assert.deepEqual(['username', 'email', 'password'], extractor.paths(err));
-        });
+      this.user.create({password: "abc"}).then(function(user) {
+      }).catch(function(err) {
+        assert.deepEqual(['username', 'email', 'password'], extractor.paths(err));
       });
     });
   });

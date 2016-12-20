@@ -15,8 +15,8 @@ app.use(con.constraint());
 app.use(exc.forbidden());
 
 //routers
-const home = require('./controllers/home');
-const users = require('./controllers/users');
+import home from './controllers/home';
+import users from './controllers/users';
 app.use(home.routes());
 app.use(users.routes());
 
