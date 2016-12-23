@@ -1,24 +1,13 @@
 'use strict';
 import randomstring from "randomstring";
 import passwordHash from "password-hash";
+import validator from "validator";
 
 module.exports = function(sequelize, DataTypes) {
   const User = sequelize.define('user', {
-    username: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: { is: /^[a-z0-9][a-z0-9_]+$/i, min: 3, max: 32 }
-    },
-    nickname: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      validate: { max: 108 }
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: { isEmail: true }
-    },
+    username: DataTypes.STRING,
+    nickname: type: DataTypes.STRING,
+    email: type: DataTypes.STRING,
     avatarUrl: {
       type: DataTypes.STRING,
       field: 'avatar_url'
@@ -29,9 +18,7 @@ module.exports = function(sequelize, DataTypes) {
       unique: true
     },
     bio: DataTypes.TEXT,
-    salt: {
-      type: DataTypes.STRING,
-    },
+    salt: type: DataTypes.STRING,
     encryptedPassword: {
       type: DataTypes.STRING,
       field: 'encrypted_password'
@@ -48,13 +35,6 @@ module.exports = function(sequelize, DataTypes) {
         this.authenticationToken = randomstring.generate({ charset: 'hex' });
         this.encryptedPassword = passwordHash.generate(this.password + this.salt)
       },
-      validate: {
-        isLongEnough: function (val) {
-          if (val.length < 6) {
-            throw new Error("Please choose a longer password")
-          }
-        }
-      }
     },
   },
   {
@@ -64,21 +44,32 @@ module.exports = function(sequelize, DataTypes) {
     //   value: null }
     hooks: {
       beforeValidate: function(user, options) {
-        if (!user.password && user.isNewRecord) {
-          let item = new sequelize.ValidationErrorItem('password cannot be null', 'notNull Violation', 'password', null)
-          let err = new sequelize.ValidationError("notNull Violation: password can't be null!", [item]);
-          return sequelize.Promise.reject(err);
+        let items = [];
+        if (user.isNewRecord) {
+          let password = user.password;
+          if (!password || password.length < 6) {
+            let item = new sequelize.ValidationErrorItem('password invalid', 'Invalid', 'password', '11001')
+            items.push(item);
+          }
         }
-
-        if (!user.isNewRecord && !!user.password && !user.validOldPassword()) {
-          let item = new sequelize.ValidationErrorItem('old_password invalid', 'invalid', 'old_password', null)
-          let err = new sequelize.ValidationError("old_password invalid!", [item]);
-          return sequelize.Promise.reject(err);
+        let uv = /^[a-z0-9][a-z0-9_]+$/i;
+        let username = user.username;
+        // TODO unique
+        if (!username || !validator.isByteLength(username, {min: 3, max: 32}) || !uv.test(username)) {
+          let item = new sequelize.ValidationErrorItem('username invalid', 'Invalid', 'username', '11002')
+          items.push(item);
         }
-
-        if (!user.isNewRecord && !!user.email && !user.validPassword()) {
-          let item = new sequelize.ValidationErrorItem('password cannot be null', 'invalid', 'password', null)
-          let err = new sequelize.ValidationError("password invalid!", [item]);
+        if (!!user.nickname && validator.isByteLength(user.nickname, {max: 32})) {
+          let item = new sequelize.ValidationErrorItem('nickname invalid', 'Invalid', 'nickname', '11003')
+          items.push(item);
+        }
+        // TODO unique
+        if (!user.email || !validator.isEmail(user.email)) {
+          let item = new sequelize.ValidationErrorItem('email invalid', 'Invalid', 'email', '11004')
+          items.push(item);
+        }
+        if (items.length > 0) {
+          let err = new sequelize.ValidationError("User Info invalid!", items);
           return sequelize.Promise.reject(err);
         }
       },
