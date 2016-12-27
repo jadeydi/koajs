@@ -1,5 +1,5 @@
 import assert from 'assert';
-const extractor = require('../../utils/error');
+import error from '../../components/error';
 
 describe("models/user", function() {
   before(function () {
@@ -7,20 +7,11 @@ describe("models/user", function() {
     this.user = require('../../models').user;
   });
 
-  describe("#create null attributes", function() {
-    it('should not create user', function() {
-      this.user.create({}).then(function(user) {
-      }).catch(function(err) {
-        assert.deepEqual(['password'], extractor.paths(err));
-      });
-    });
-  });
-
   describe("#create with invalid attributes", function() {
     it('should not create user', function() {
       this.user.create({password: "abc"}).then(function(user) {
       }).catch(function(err) {
-        assert.deepEqual(['username', 'email', 'password'], extractor.paths(err));
+        assert.deepEqual(['username', 'email', 'password'].sort(), error.Extract(err));
       });
     });
   });

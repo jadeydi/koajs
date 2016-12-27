@@ -2,12 +2,13 @@
 import randomstring from "randomstring";
 import passwordHash from "password-hash";
 import validator from "validator";
+import error from "../components/error";
 
 module.exports = function(sequelize, DataTypes) {
   const User = sequelize.define('user', {
     username: DataTypes.STRING,
-    nickname: type: DataTypes.STRING,
-    email: type: DataTypes.STRING,
+    nickname: DataTypes.STRING,
+    email: DataTypes.STRING,
     avatarUrl: {
       type: DataTypes.STRING,
       field: 'avatar_url'
@@ -18,7 +19,7 @@ module.exports = function(sequelize, DataTypes) {
       unique: true
     },
     bio: DataTypes.TEXT,
-    salt: type: DataTypes.STRING,
+    salt: DataTypes.STRING,
     encryptedPassword: {
       type: DataTypes.STRING,
       field: 'encrypted_password'
@@ -48,29 +49,38 @@ module.exports = function(sequelize, DataTypes) {
         if (user.isNewRecord) {
           let password = user.password;
           if (!password || password.length < 6) {
-            let item = new sequelize.ValidationErrorItem('password invalid', 'Invalid', 'password', '11001')
-            items.push(item);
+            items.push(error.InvalidError(sequelize, "password"));
           }
         }
         let uv = /^[a-z0-9][a-z0-9_]+$/i;
         let username = user.username;
-        // TODO unique
         if (!username || !validator.isByteLength(username, {min: 3, max: 32}) || !uv.test(username)) {
-          let item = new sequelize.ValidationErrorItem('username invalid', 'Invalid', 'username', '11002')
-          items.push(item);
+          items.push(error.InvalidError(sequelize, "username"));
+        }
+        if (user.changed('username')) {
+          // Todo: don't use promise
+          user.Model.findOne({where: {"username": user.username}}).then(function(existence) {
+            if (!!existence) {
+              items.push(error.UniqueError(sequelize, "username"));
+            }
+          });
         }
         if (!!user.nickname && validator.isByteLength(user.nickname, {max: 32})) {
-          let item = new sequelize.ValidationErrorItem('nickname invalid', 'Invalid', 'nickname', '11003')
-          items.push(item);
+          items.push(error.InvalidError(sequelize, "nickname"));
         }
-        // TODO unique
         if (!user.email || !validator.isEmail(user.email)) {
-          let item = new sequelize.ValidationErrorItem('email invalid', 'Invalid', 'email', '11004')
-          items.push(item);
+          items.push(error.InvalidError(sequelize, "email"));
+        }
+        if (user.changed('email')) {
+          // Todo: don't use promise
+          user.Model.findOne({where: {"email": user.email}}).then(function(existence) {
+            if (!!existence) {
+              items.push(error.UniqueError(sequelize, "email"));
+            }
+          });
         }
         if (items.length > 0) {
-          let err = new sequelize.ValidationError("User Info invalid!", items);
-          return sequelize.Promise.reject(err);
+          return sequelize.Promise.reject(new sequelize.ValidationError("User Info Invalid!", items));
         }
       },
     }
