@@ -15,7 +15,6 @@ describe("models/user", function() {
       });
     });
   });
-
   describe("#create", function() {
     it('should create valid user', function() {
       return this.user.create({username: "yuqlee", email: "yuqlee@gmail.com", password: "password"}).then(function(user) {
