@@ -19,7 +19,7 @@ describe('controllers/users', function() {
   });
 
   describe('POST /users', function() {
-    it('should got 201', function(done) {
+    it('should got 403', function(done) {
       request
         .post('/users')
         .set(token)

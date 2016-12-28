@@ -46,6 +46,7 @@ module.exports = function(sequelize, DataTypes) {
     hooks: {
       beforeValidate: function(user, options) {
         let items = [];
+        let promises = [];
         if (user.isNewRecord) {
           let password = user.password;
           if (!password || password.length < 6) {
@@ -57,33 +58,34 @@ module.exports = function(sequelize, DataTypes) {
         if (!username || !validator.isByteLength(username, {min: 3, max: 32}) || !uv.test(username)) {
           items.push(error.InvalidError(sequelize, "username"));
         }
-        //if (user.changed('username')) {
-        //  // Todo: don't use promise
-        //  let existence = user.Model.findOne({where: {"username": user.username}}).then(function(existence) {
-        //    return existence;
-        //  });
-        //  if (!!existence) {
-        //    items.push(error.UniqueError(sequelize, "username"));
-        //  }
-        //}
+        if (user.changed('username')) {
+          let existence = user.Model.findOne({where: {"username": user.username}}).then(function(existence) {
+            if (!!existence) {
+              return error.UniqueError(sequelize, "username");
+            }
+          });
+          promises.push(existence);
+        }
         if (!!user.nickname && validator.isByteLength(user.nickname, {max: 32})) {
           items.push(error.InvalidError(sequelize, "nickname"));
         }
         if (!user.email || !validator.isEmail(user.email)) {
           items.push(error.InvalidError(sequelize, "email"));
         }
-        //if (user.changed('email')) {
-        //  // Todo: don't use promise
-        //  let existence = user.Model.findOne({where: {"email": user.email}}).then(function(existence) {
-        //    return existence;
-        //  });
-        //  if (!!existence) {
-        //    items.push(error.UniqueError(sequelize, "email"));
-        //  }
-        //}
-        if (items.length > 0) {
-          return sequelize.Promise.reject(new sequelize.ValidationError("User Info Invalid!", items));
+        if (user.changed('email')) {
+          let existence = user.Model.findOne({where: {"email": user.email}}).then(function(existence) {
+            if (!!existence) {
+              return error.UniqueError(sequelize, "email");
+            }
+          });
+          promises.push(existence);
         }
+        return Promise.all([...items, ...promises]).then(values => {
+          values = values.filter(function(n){ return n != undefined })
+          if (values.length > 0) {
+            return sequelize.Promise.reject(new sequelize.ValidationError("User Info Invalid!", items));
+          }
+        });
       },
     }
   },

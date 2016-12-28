@@ -14,16 +14,31 @@ describe("models/user", function() {
       }).catch(function(err) {
         assert.deepEqual(['username', 'email', 'password'].sort(), error.Extract(err));
       });
+    });
+  });
+
+  describe("#create with invalid attributes", function() {
+    it('should not create user', function() {
       this.user.create({username: "!yuqlee", email: "yuqlee@gmail.com", password: "password"}).then(function(user) {
         console.info(user)
       }).catch(function(err) {
         assert.deepEqual(['username'].sort(), error.Extract(err));
       });
+    });
+  });
+
+  describe("#create with invalid attributes", function() {
+    it('should not create user', function() {
       this.user.create({username: "yuqlee", email: "yuqleegmail.com", password: "password"}).then(function(user) {
         console.info(user)
       }).catch(function(err) {
         assert.deepEqual(['email'].sort(), error.Extract(err));
       });
+    });
+  });
+
+  describe("#create with invalid attributes", function() {
+    it('should not create user', function() {
       this.user.create({username: "yuqlee", email: "yuqlee@gmail.com", password: "pass"}).then(function(user) {
         console.info(user)
       }).catch(function(err) {
