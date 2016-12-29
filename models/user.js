@@ -47,10 +47,14 @@ module.exports = function(sequelize, DataTypes) {
       beforeValidate: function(user, options) {
         let items = [];
         let promises = [];
+        let password = user.password;
         if (user.isNewRecord) {
-          let password = user.password;
           if (!password || password.length < 6) {
             items.push(error.InvalidError(sequelize, "password"));
+          }
+        } else {
+          if (!!password && !user.validOldPassword()) {
+            items.push(error.InvalidError(sequelize, "old_password"));
           }
         }
         let uv = /^[a-z0-9][a-z0-9_]+$/i;
