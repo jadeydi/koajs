@@ -53,8 +53,14 @@ module.exports = function(sequelize, DataTypes) {
             items.push(error.InvalidError(sequelize, "password"));
           }
         } else {
-          if (!!password && !user.validOldPassword()) {
-            items.push(error.InvalidError(sequelize, "old_password"));
+          if (user.changed('email')) {
+            if (!user.validPassword()) {
+              items.push(error.InvalidError(sequelize, "password"));
+            }
+          } else if (user.changed('password')){
+            if (!!password && !user.validOldPassword()) {
+              items.push(error.InvalidError(sequelize, "old_password"));
+            }
           }
         }
         let uv = /^[a-z0-9][a-z0-9_]+$/i;
@@ -91,10 +97,8 @@ module.exports = function(sequelize, DataTypes) {
           }
         });
       },
-    }
-  },
-  {
-    underscored: true,
+    },
+
     instanceMethods: {
       name: function() {
         return this.nickname || this.username
@@ -106,6 +110,9 @@ module.exports = function(sequelize, DataTypes) {
         return passwordHash.verify(this.oldPassword + this.salt, this.encryptedPassword)
       },
     }
+  },
+  {
+    underscored: true,
   });
   return User;
 };
