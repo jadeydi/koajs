@@ -8,48 +8,40 @@ describe("models/user", function() {
   });
 
   describe("#create without user", function() {
-    describe("#create with invalid attributes", function() {
-      it('should not create user', function() {
+    describe("#create user", function() {
+      it('should not create user without attributes', function() {
         return this.user.create({}).then(function(user) {
           console.info(user)
         }).catch(function(err) {
           assert.deepEqual(['username', 'email', 'password'].sort(), error.Extract(err));
         });
       });
-    });
 
-    describe("#create with invalid username", function() {
-      it('should not create user', function() {
+      it('should not create user with invalid username', function() {
         return this.user.create({username: "!yuqlee", email: "yuqlee@gmail.com", password: "password"}).then(function(user) {
           console.info(user)
         }).catch(function(err) {
           assert.deepEqual(['username'].sort(), error.Extract(err));
         });
       });
-    });
 
-    describe("#create with invalid email", function() {
-      it('should not create user', function() {
+      it('should not create user with invalid email', function() {
         this.user.create({username: "yuqlee", email: "yuqleegmail.com", password: "password"}).then(function(user) {
           console.info(user)
         }).catch(function(err) {
           assert.deepEqual(['email'].sort(), error.Extract(err));
         });
       });
-    });
 
-    describe("#create with invalid password", function() {
-      it('should not create user', function() {
+      it('should not create user with invalid password', function() {
         this.user.create({username: "yuqlee", email: "yuqlee@gmail.com", password: "pass"}).then(function(user) {
           console.info(user)
         }).catch(function(err) {
           assert.deepEqual(['password'].sort(), error.Extract(err));
         });
       });
-    });
 
-    describe("#create", function() {
-      it('should create valid user', function() {
+      it('should create user', function() {
         return this.user.create({username: "yuqlee", email: "yuqlee@gmail.com", password: "password"}).then(function(user) {
           assert.equal(user.username, "yuqlee")
           assert.equal(user.email, "yuqlee@gmail.com")
@@ -68,21 +60,7 @@ describe("models/user", function() {
       });
     });
 
-    describe("#get", function() {
-      it('should retrun valid user', function() {
-        return this.user.findOne({where: {username: "yuqlii"}}).then(function(user) {
-          assert.equal("yuqlii", user.username)
-          return user;
-        }).then(function(user) {
-          return user.update({username: "yuqluu"}).then(function(user) {
-            assert.equal("yuqluu", user.name());
-            return user;
-          });
-        });
-      });
-    });
-
-    describe("#Update user attributes", function() {
+    describe("#Update user", function() {
       it('should failure for invalid password', function() {
         let that = this;
         async function t() {
@@ -96,7 +74,7 @@ describe("models/user", function() {
             return error.Extract(err);
           });
 
-          assert.equal("yuqluu", user.name());
+          assert.equal("yuqlii", user.name());
           assert.deepEqual(["password"], e1);
           return user;
         }
@@ -112,6 +90,18 @@ describe("models/user", function() {
           }).catch(function(err) {
             assert.deepEqual(["old_password"], error.Extract(err));
             return err;
+          });
+        });
+      });
+
+      it('should update user', function() {
+        return this.user.findById(2).then(function(user) {
+          assert.equal("yuqlii", user.username)
+          return user;
+        }).then(function(user) {
+          return user.update({username: "yuqluu"}).then(function(user) {
+            assert.equal("yuqluu", user.name());
+            return user;
           });
         });
       });
