@@ -9,6 +9,7 @@ const constraint = function() {
     let token = !apiTokens[ctx.headers['x-koa-api-token']];
     if (token) {
       ctx.status = 401;
+      ctx.body = {error: {code: 10401, data: []}};
     } else {
       ctx.apiToken = apiTokens[ctx.headers['x-koa-api-token']]
       await next();

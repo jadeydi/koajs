@@ -23,12 +23,12 @@ describe('Server', function() {
   });
 
   describe('GET /notfound', function() {
-    it('should got 404', function(done) {
+    it('should got 401', function(done) {
       request
         .get('/notfound')
         .set(token)
         .set('x-koa-api-token', '8371f1f8c7ed47444ab37c14c4eae9c3')
-        .expect(404, done);
+        .expect(401, done);
     });
   });
 });

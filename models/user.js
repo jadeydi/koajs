@@ -45,9 +45,7 @@ module.exports = function(sequelize, DataTypes) {
     //   value: null }
     hooks: {
       beforeValidate: function(user, options) {
-        let items = [];
-        let promises = [];
-        let password = user.password;
+        let items = [], promises = [], password = user.password;
         if (user.isNewRecord) {
           if (!password || password.length < 6) {
             items.push(error.InvalidError(sequelize, "password"));

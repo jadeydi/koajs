@@ -8,13 +8,12 @@ describe('controllers/users', function() {
     return require('../../models').sequelize.sync({force: true});
   });
 
-  describe('GET /users', function() {
+  describe('GET /', function() {
     it('should got 200 and {"page": "users"}', function(done) {
       request
-        .get('/users')
+        .get('/')
         .set(token)
-        .expect(200)
-        .expect('{\n  "page": "users"\n}', done);
+        .expect(200, done);
     });
   });
 
@@ -26,8 +25,7 @@ describe('controllers/users', function() {
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .send('{"username":"Fo", "email": "Fo", "password": "Password"}')
-        .expect(403)
-        .expect('{\n  "hello": "world"\n}', done);
+        .expect(403, done);
     });
   });
 });

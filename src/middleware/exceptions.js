@@ -4,7 +4,7 @@ const forbidden = function() {
       await next();
     } catch(err) {
       ctx.status = 403;
-      ctx.body = {hello: "world"};
+      ctx.body = {error: {code: 11000, data: err.errors}};
     }
   }
 };

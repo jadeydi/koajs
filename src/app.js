@@ -11,8 +11,10 @@ app.use(json());
 
 import * as exc from './middleware/exceptions';
 import * as con from './middleware/constraints';
+import * as auth from './middleware/authentication';
 app.use(con.constraint());
 app.use(exc.forbidden());
+app.use(auth.authenticate());
 
 //routers
 import home from './controllers/home';
