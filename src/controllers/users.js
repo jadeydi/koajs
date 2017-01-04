@@ -7,7 +7,7 @@ const User = models.user;
 
 router
 .get('/acccount', async (ctx) => {
-  ctx.body = {page: 'users'};
+  ctx.body = user.renderAccount(ctx.current_user);
 })
 .post('/users', async (ctx) => { // Todo change route name
   const user = await User.create(ctx.request.body).then(function(user) {
