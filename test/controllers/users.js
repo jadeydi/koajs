@@ -8,19 +8,10 @@ describe('controllers/users', function() {
     return require('../../models').sequelize.sync({force: true});
   });
 
-  describe('GET /', function() {
-    it('should got 200 and {"page": "users"}', function(done) {
-      request
-        .get('/')
-        .set(token)
-        .expect(200, done);
-    });
-  });
-
-  describe('POST /users', function() {
+  describe('POST /account', function() {
     it('should got 403', function(done) {
       request
-        .post('/users')
+        .post('/account')
         .set(token)
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')

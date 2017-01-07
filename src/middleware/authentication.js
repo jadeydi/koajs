@@ -4,7 +4,7 @@ const User = models.user;
 
 const whiteList = [
   ["GET", "^/$"],
-  ["POST", "^/users$"],
+  ["POST", "^/account"],
 ]
 
 function valid(ctx) {
