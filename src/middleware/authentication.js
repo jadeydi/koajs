@@ -4,10 +4,11 @@ const User = models.user;
 
 const whiteList = [
   ["GET", "^/$"],
-  ["POST", "^/account"],
+  ["POST", "^/session$"],
+  ["POST", "^/account$"],
 ]
 
-function valid(ctx) {
+function verify(ctx) {
   return whiteList.some((item) => {
     return item[0] == ctx.method && (new RegExp(item[1])).test(ctx.path)
   });
@@ -15,7 +16,7 @@ function valid(ctx) {
 
 const authenticate = () => {
   return async (ctx, next) => {
-    if (valid(ctx)) {
+    if (verify(ctx)) {
       await next();
     } else {
       const user = await User.findOne({where: {authenticationToken: ctx.headers['x-koa-user-token']}}).then((user) => {
