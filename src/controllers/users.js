@@ -1,6 +1,7 @@
 import routers from 'koa-router';
 import models from '../../models';
 import views from '../views/user';
+import error from '../views/error';
 
 const router = routers();
 const User = models.user;
@@ -14,12 +15,12 @@ router
     throw err;
   })
   if (!user) {
-    ctx.body = {error: {code: 10404, data: []}}
+    ctx.body = error.renderNotFound();
     return
   }
-  user.password
+  user.password = body.password
   if (!user.validPassword()) {
-    ctx.body = {error: {code: 10401, data: []}}
+    ctx.body = error.renderUnauthorized();
     return
   }
   ctx.body = views.renderAccount(user);
@@ -29,6 +30,14 @@ router
 })
 .post('/account', async (ctx) => {
   const user = await User.create(ctx.request.body).then((user) => {
+    return user
+  }).catch((err) => {
+    throw err;
+  });
+  ctx.body = views.renderAccount(user);
+})
+.put('/account', async(ctx) => {
+  const user = await ctx.current_user.update(ctx.request.body).then(function(user) {
     return user
   }).catch((err) => {
     throw err;

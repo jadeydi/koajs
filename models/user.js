@@ -32,9 +32,6 @@ module.exports = function(sequelize, DataTypes) {
       set: function (val) {
         // Remember to set the data value, otherwise it won't be validated
         this.setDataValue('password', val);
-        this.salt = randomstring.generate(16);
-        this.authenticationToken = randomstring.generate({ charset: 'hex' });
-        this.encryptedPassword = passwordHash.generate(this.password + this.salt)
       },
     },
   },
@@ -94,6 +91,13 @@ module.exports = function(sequelize, DataTypes) {
             return sequelize.Promise.reject(new sequelize.ValidationError("User Info Invalid!", items));
           }
         });
+      },
+      beforeSave: function(user, options) {
+        if (user.changed('password')) {
+          user.salt = randomstring.generate(16);
+          user.authenticationToken = randomstring.generate({ charset: 'hex' });
+          user.encryptedPassword = passwordHash.generate(user.password + user.salt);
+        }
       },
     },
 

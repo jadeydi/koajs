@@ -1,10 +1,13 @@
 import assert from 'assert';
 import error from '../../components/error';
+import models from '../../models';
 
 describe("models/user", function() {
-  before(function() {
-    require('../../models').sequelize.sync({force: true});
-    this.user = require('../../models').user;
+  before(function(done) {
+    this.user = models.user;
+    models.sequelize.sync({force: true}).then(function() {
+      done();
+    });
   });
 
   describe("#create without user", function() {
