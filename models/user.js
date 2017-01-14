@@ -92,7 +92,7 @@ module.exports = function(sequelize, DataTypes) {
           }
         });
       },
-      beforeSave: function(user, options) {
+      afterValidate: function(user, options) {
         if (user.changed('password')) {
           user.salt = randomstring.generate(16);
           user.authenticationToken = randomstring.generate({ charset: 'hex' });

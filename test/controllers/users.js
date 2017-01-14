@@ -1,3 +1,4 @@
+import assert from 'assert';
 import app from '../../build/app';
 import req from 'supertest';
 const request = req.agent(app.listen());
@@ -29,7 +30,11 @@ describe('controllers/users', function() {
         .set(header.json)
         .set(header.type)
         .send('{"username":"yuqlee", "email": "im.yuqlee@gmail.com", "password": "password"}')
-        .expect(200, done);
+        .expect(200)
+        .expect(function(res) {
+          assert.equal("yuqlee", res.body.username)
+        })
+        .end(done);
     });
 
     it('POST /session status 200 code 10404', function(done) {
@@ -63,7 +68,7 @@ describe('controllers/users', function() {
         .send('{"identity": "yuqlee", "password": "password"}')
         .expect(200)
         .expect(function(res) {
-          console.info(res.body)
+          assert.equal("yuqlee", res.body.username)
         })
         .end(done);
     });
