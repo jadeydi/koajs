@@ -32,7 +32,7 @@ describe('controllers/users', function() {
         .send('{"username":"yuqlee", "email": "im.yuqlee@gmail.com", "password": "password"}')
         .expect(200)
         .expect(function(res) {
-          assert.equal("yuqlee", res.body.username)
+          assert.ok(res.body.hasOwnProperty('data'))
         })
         .end(done);
     });
@@ -59,7 +59,7 @@ describe('controllers/users', function() {
         .expect('{\n  "error": {\n    "code": 10401,\n    "data": []\n  }\n}', done);
     });
 
-    it('POST /session status 200 code 10401', function(done) {
+    it('POST /session status 200', function(done) {
       request
         .post('/session')
         .set(header.token)
@@ -68,7 +68,7 @@ describe('controllers/users', function() {
         .send('{"identity": "yuqlee", "password": "password"}')
         .expect(200)
         .expect(function(res) {
-          assert.equal("yuqlee", res.body.username)
+          assert.ok(res.body.hasOwnProperty('data'))
         })
         .end(done);
     });
