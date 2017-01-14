@@ -3,11 +3,9 @@ import error from '../../components/error';
 import models from '../../models';
 
 describe("models/user", function() {
-  before(function(done) {
+  before(function() {
     this.user = models.user;
-    models.sequelize.sync({force: true}).then(function() {
-      done();
-    });
+    return models.sequelize.sync({force: true})
   });
 
   describe("#create without user", function() {

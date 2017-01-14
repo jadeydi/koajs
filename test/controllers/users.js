@@ -6,10 +6,8 @@ import * as header from '../config';
 import models from '../../models';
 
 describe('controllers/users', function() {
-  before(function (done) {
-    models.sequelize.sync({force: true}).then(function() {
-      done();
-    });
+  before(function () {
+    return models.sequelize.sync({force: true});
   });
 
   describe('sign_up and sign_in', function() {
