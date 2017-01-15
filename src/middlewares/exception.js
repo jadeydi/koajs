@@ -1,10 +1,12 @@
-const forbidden = function() {
+import error from '../views/error';
+
+const forbidden = () => {
   return async (ctx, next) => {
     try {
       await next();
     } catch(err) {
       ctx.status = 403;
-      ctx.body = {error: {code: 11000, data: err.errors}};
+      ctx.body = error.renderForbidden();
     }
   }
 };

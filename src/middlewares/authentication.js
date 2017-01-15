@@ -1,4 +1,5 @@
 import models from '../../models';
+import error from '../views/error';
 
 const User = models.user;
 
@@ -7,12 +8,6 @@ const whiteList = [
   ["POST", "^/session$"],
   ["POST", "^/account$"],
 ]
-
-function verify(ctx) {
-  return whiteList.some((item) => {
-    return item[0] == ctx.method && (new RegExp(item[1])).test(ctx.path)
-  });
-}
 
 const authenticate = () => {
   return async (ctx, next) => {
@@ -29,10 +24,16 @@ const authenticate = () => {
         await next();
       } else {
         ctx.status = 401;
-        ctx.body = {error: {code: 10401, data: []}};
+        ctx.body = error.renderUnauthorized();
       }
     }
   }
+}
+
+function verify(ctx) {
+  return whiteList.some((item) => {
+    return item[0] == ctx.method && (new RegExp(item[1])).test(ctx.path)
+  });
 }
 
 export {authenticate}

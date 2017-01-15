@@ -5,5 +5,9 @@ module.exports = {
 
   renderUnauthorized: function() {
     return {error: {code: 10401, data: []}};
-  }
+  },
+
+  renderForbidden: function() {
+    return {error: {code: 10403, data: []}};
+  },
 }
