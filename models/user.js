@@ -28,11 +28,7 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.VIRTUAL
     },
     password: {
-      type: DataTypes.VIRTUAL,
-      set: function (val) {
-        // Remember to set the data value, otherwise it won't be validated
-        this.setDataValue('password', val);
-      },
+      type: DataTypes.VIRTUAL
     },
   },
   {
@@ -88,7 +84,7 @@ module.exports = function(sequelize, DataTypes) {
         return Promise.all([...items, ...promises]).then(values => {
           values = values.filter(function(n){ return n != undefined })
           if (values.length > 0) {
-            return sequelize.Promise.reject(new sequelize.ValidationError("User Info Invalid!", items));
+            return sequelize.Promise.reject(new sequelize.ValidationError("User Info Invalid!", values));
           }
         });
       },

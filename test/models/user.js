@@ -51,6 +51,14 @@ describe("models/user", function() {
           console.info(err)
         });
       });
+
+      it('should create user', function() {
+        return this.user.create({username: "yuqlee", email: "yuqlee@gmail.com", password: "password"}).then(function(user) {
+          console.info(user)
+        }).catch(function(err) {
+          assert.deepEqual(['username', 'email'].sort(), error.Extract(err));
+        });
+      });
     });
   });
 
