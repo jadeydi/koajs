@@ -43,19 +43,16 @@ module.exports = function(sequelize, DataTypes) {
           if (!password || password.length < 6) {
             items.push(error.InvalidError(sequelize, "password"));
           }
-        } else {
-          if (user.changed('email')) {
-            if (!user.validPassword()) {
-              items.push(error.InvalidError(sequelize, "password"));
-            }
-          } else if (user.changed('password')){
-            if (!!password && !user.validOldPassword()) {
-              items.push(error.InvalidError(sequelize, "old_password"));
-            }
+        }
+        if (!user.isNewRecord) {
+          if (user.changed('email') && (!user.validPassword() || !user.validOldPassword())) {
+            items.push(error.InvalidError(sequelize, "password"));
+          }
+          if (user.changed('password') && (!user.validPassword() || !user.validOldPassword())) {
+            items.push(error.InvalidError(sequelize, "old_password"));
           }
         }
-        let uv = /^[a-z0-9][a-z0-9_]+$/i;
-        let username = user.username;
+        let uv = /^[a-z0-9][a-z0-9_]+$/i, username = user.username;
         if (!username || !validator.isByteLength(username, {min: 3, max: 32}) || !uv.test(username)) {
           items.push(error.InvalidError(sequelize, "username"));
         }
