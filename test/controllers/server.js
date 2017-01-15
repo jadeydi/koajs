@@ -18,7 +18,7 @@ describe('Server', function() {
         .get('/')
         .set(token)
         .expect(200)
-        .expect('{\n  "page": "index"\n}', done);
+        .expect('{}', done);
     });
   });
 
