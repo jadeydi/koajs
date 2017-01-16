@@ -23,8 +23,7 @@ const authenticate = () => {
         ctx.current_user = user;
         await next();
       } else {
-        ctx.status = 401;
-        ctx.body = error.renderUnauthorized();
+        error.renderUnauthorized(ctx);
       }
     }
   }

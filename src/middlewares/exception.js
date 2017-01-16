@@ -5,8 +5,7 @@ const forbidden = () => {
     try {
       await next();
     } catch(err) {
-      ctx.status = 403;
-      ctx.body = error.renderForbidden();
+      error.renderForbidden(ctx);
     }
   }
 };

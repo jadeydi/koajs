@@ -10,8 +10,7 @@ const constraint = () => {
   return async (ctx, next) => {
     let token = !apiTokens[ctx.headers['x-koa-api-token']];
     if (token) {
-      ctx.status = 401;
-      ctx.body = views.renderUnauthorized();
+      error.renderUnauthorized(ctx);
     } else {
       ctx.apiToken = apiTokens[ctx.headers['x-koa-api-token']]
       await next();

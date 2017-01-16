@@ -1,13 +1,13 @@
 module.exports = {
-  renderNotFound: function() {
-    return {error: {code: 10404, data: []}};
+  renderNotFound: function(ctx) {
+    ctx.body = {error: {code: 10404, data: []}};
   },
 
-  renderUnauthorized: function() {
-    return {error: {code: 10401, data: []}};
+  renderUnauthorized: function(ctx) {
+    ctx.body = {error: {code: 10401, data: []}};
   },
 
-  renderForbidden: function() {
-    return {error: {code: 10403, data: []}};
+  renderForbidden: function(ctx) {
+    ctx.body = {error: {code: 10403, data: []}};
   },
 }

@@ -11,14 +11,18 @@ describe('controllers/users', function() {
   });
 
   describe('sign_up and sign_in', function() {
-    it('POST /account should got 403', function(done) {
+    it('POST /account should got error', function(done) {
       request
         .post('/account')
         .set(header.token)
         .set(header.json)
         .set(header.type)
         .send('{"username":"Fo", "email": "Fo", "password": "Password"}')
-        .expect(403, done);
+        .expect(200)
+        .expect(function(res) {
+          assert.ok(res.body.hasOwnProperty('error'))
+        })
+        .end(done);
     });
 
     it('POST /account should got 200', function(done) {

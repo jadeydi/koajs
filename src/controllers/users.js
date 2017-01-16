@@ -15,12 +15,12 @@ router
     throw err;
   })
   if (!user) {
-    ctx.body = error.renderNotFound();
+    error.renderNotFound(ctx);
     return
   }
   user.password = body.password
   if (!user.validPassword()) {
-    ctx.body = error.renderUnauthorized();
+    error.renderUnauthorized(ctx);
     return
   }
   ctx.body = views.renderAccount(user);
